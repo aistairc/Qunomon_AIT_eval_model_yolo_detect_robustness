@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  jupyter:
+    build:
+      context: ./jupyter
+      dockerfile: dockerfile
+    user: root
+    ports:
+      - 9888:8888
+    shm_size: '8g'
+    container_name: jupyter
+    environment:
+      TZ: Asia/Tokyo
+      NB_UID: 1000
+      NB_GID: 100
+      GRANT_SUDO: "yes"
+      PASSWORD: "password"
+      JUPYTER_TOKEN: "token"
+    volumes:
+      - ../../develop:/workdir/root/develop
+      - ../../deploy:/workdir/root/deploy
+      - ../../local_qai:/usr/local/qai
+      - ../../tool:/workdir/root/tool
+      - ../../:/workdir/root/top_dir

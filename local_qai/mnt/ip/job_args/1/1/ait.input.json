@@ -1,0 +1,41 @@
+{
+  "Inventories": [
+    {
+      "Name": "trained_model",
+      "Value": "/usr/local/qai/inventory/model/best.torchscript"
+    },
+    {
+      "Name": "test_dataset",
+      "Value": "/usr/local/qai/inventory/data/bdd100k_test.h5"
+    }
+  ],
+  "MethodParams": [
+    {
+      "Name": "test_image_dataset_name",
+      "Value": "images"
+    },
+    {
+      "Name": "test_label_dataset_name",
+      "Value": "yolo_labels"
+    },
+    {
+      "Name": "delta_lower",
+      "Value": "0"
+    },
+    {
+      "Name": "delta_upper",
+      "Value": "10"
+    },
+    {
+      "Name": "delta_increment",
+      "Value": "2"
+    },
+    {
+      "Name": "norm",
+      "Value": "2"
+    }
+  ],
+  "testbed_mount_volume_path": "/usr/local/qai/mnt",
+  "run_id": 1,
+  "job_id": 1
+}
