@@ -20,7 +20,7 @@
     {
       "name": "test_dataset",
       "type": "dataset",
-      "description": "テスト用データセットを格納したHDF5ファイル。 HDF5ファイルの内部に2つのデータセットを用意する(1)モデルに入力される多次元配列を含むデータセット(データセット(1)の要素数はmodelの入力層の要素数と一致)(2)各画像データのyolo形式の正解ラベル（バウンディングボックスとクラス情報）を含むデータセット(データセット(2)の要素数はmodelの出力層の要素数と一致))",
+      "description": "テスト用データセットを格納したHDF5ファイル。 HDF5ファイルの内部に2つのデータセットを用意する(1)モデルに入力される画像データセット(データセット(1)の要素数はmodelの入力層の要素数と一致)(2)各画像データのyolo形式の正解ラベル（バウンディングボックスとクラス情報）を含むデータセット(データセット(2)の要素数はmodelの出力層の要素数と一致))",
       "requirement": {
         "format": [
           "h5"
@@ -30,10 +30,10 @@
     {
       "name": "trained_model",
       "type": "model",
-      "description": "TorchScript形式でexportしたYOLOのモデルデータ。入力と出力の要素数はtest_dataset inventoryと一致させる",
+      "description": "TorchScript形式でexportしたYOLOの物体検出モデル（.torchscript）。入力と出力の要素数はtest_dataset inventoryと一致させる",
       "requirement": {
         "format": [
-          "*"
+          ".torchscript"
         ]
       }
     }

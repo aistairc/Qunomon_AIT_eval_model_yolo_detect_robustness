@@ -38,7 +38,7 @@
 
 # [uneditable]
 
-# In[1]:
+# In[ ]:
 
 
 # Determine whether to start AIT or jupyter by startup argument
@@ -179,12 +179,12 @@ if not is_ait_launch:
     inventory_requirement_dataset = manifest_genenerator.format_ait_inventory_requirement(format_=['h5'])
     manifest_genenerator.add_ait_inventories(name='test_dataset', 
                                              type_='dataset', 
-                                             description='テスト用データセットを格納したHDF5ファイル。 HDF5ファイルの内部に2つのデータセットを用意する(1)モデルに入力される多次元配列を含むデータセット(データセット(1)の要素数はmodelの入力層の要素数と一致)(2)各画像データのyolo形式の正解ラベル（バウンディングボックスとクラス情報）を含むデータセット(データセット(2)の要素数はmodelの出力層の要素数と一致))', 
+                                             description='テスト用データセットを格納したHDF5ファイル。 HDF5ファイルの内部に2つのデータセットを用意する(1)モデルに入力される画像データセット(データセット(1)の要素数はmodelの入力層の要素数と一致)(2)各画像データのyolo形式の正解ラベル（バウンディングボックスとクラス情報）を含むデータセット(データセット(2)の要素数はmodelの出力層の要素数と一致))', 
                                              requirement= inventory_requirement_dataset)
-    inventory_requirement_trained_model = manifest_genenerator.format_ait_inventory_requirement(format_=['*'])
+    inventory_requirement_trained_model = manifest_genenerator.format_ait_inventory_requirement(format_=['.torchscript'])
     manifest_genenerator.add_ait_inventories(name='trained_model',
                                              type_='model',
-                                             description='TorchScript形式でexportしたYOLOのモデルデータ。入力と出力の要素数はtest_dataset inventoryと一致させる',
+                                             description='TorchScript形式でexportしたYOLOの物体検出モデル（.torchscript）。入力と出力の要素数はtest_dataset inventoryと一致させる',
                                              requirement=inventory_requirement_trained_model)
     #### Parameters
     manifest_genenerator.add_ait_parameters(name='test_image_dataset_name', 
@@ -648,8 +648,8 @@ def main() -> None:
     except Exception as e:
         print(e)
     with h5py.File(test_h5,"r") as h5:
-        yolo_labels = np.array(h5[label_dataset_name][:200])
-        images=np.array(h5[image_dataset_name][:200])
+        yolo_labels = np.array(h5[label_dataset_name])
+        images=np.array(h5[image_dataset_name])
     
     #実行確認用に枚数を制限
     #num_images=600
