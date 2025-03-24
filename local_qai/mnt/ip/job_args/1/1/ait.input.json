@@ -6,7 +6,7 @@
     },
     {
       "Name": "test_dataset",
-      "Value": "/usr/local/qai/inventory/data/bdd100k_test.h5"
+      "Value": "/usr/local/qai/inventory/data/bdd100k_test_200.h5"
     }
   ],
   "MethodParams": [
