@@ -1,4 +1,4 @@
-FROM python:3.9.13-slim-bullseye
+FROM python:3.10.16-slim-bullseye
 LABEL maintainer="AIST"
 
 ENV ROOT_USER=root
@@ -24,6 +24,10 @@ ENV LC_MESSAGES ja_JP.UTF-8
 # fot pycrypto
 RUN apt-get update -yqq \
     && apt-get install gcc g++ make libffi-dev libssl-dev -yqq
+# To use Ultralytics
+RUN apt-get update -yqq \
+    && apt-get install libopencv-dev -yqq 
+
 
 # コンテナ依存関係を解決
 COPY ./resolve-dependencies.sh /resolve-dependencies.sh

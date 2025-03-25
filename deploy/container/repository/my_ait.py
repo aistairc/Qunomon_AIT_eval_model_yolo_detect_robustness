@@ -2,62 +2,60 @@
 # coding: utf-8
 
 # # AIT Development notebook
-
+# 
+# 
 # ## notebook of structure
-
-# | #  | Name                                               | cells | for_dev | edit               | description                                                                |
-# |----|----------------------------------------------------|-------|---------|--------------------|----------------------------------------------------------------------------|
-# | 1  | [Environment detection](##1-Environment-detection) | 1     | No      | uneditable         | detect whether the notebook are invoked for packaging or in production     |
-# | 2  | [Preparing AIT SDK](##2-Preparing-AIT-SDK)         | 1     | Yes     | uneditable         | download and install AIT SDK                                               |
-# | 3  | [Dependency Management](##3-Dependency-Management) | 3     | Yes     | required(cell #2)  | generate requirements.txt for Docker container                             |
-# | 4  | [Importing Libraries](##4-Importing-Libraries)     | 2     | Yes     | required(cell #1)  | import required libraries                                                  |
-# | 5  | [Manifest Generation](##5-Manifest-Generation)     | 1     | Yes     | required           | generate AIT Manifest                                                      |
-# | 6  | [Prepare for the Input](##6-Prepare-for-the-Input) | 1     | Yes     | required           | generate AIT Input JSON (inventory mapper)                                 |
-# | 7  | [Initialization](##7-Initialization)               | 1     | No      | uneditable         | initialization for AIT execution                                           |
-# | 8  | [Function definitions](##8-Function-definitions)   | N     | No      | required           | define functions invoked from Main area.<br> also define output functions. |
-# | 9  | [Main Algorithms](##9-Main-Algorithms)             | 1     | No      | required           | area for main algorithms of an AIT                                         |
-# | 10 | [Entry point](##10-Entry-point)                    | 1     | No      | uneditable         | an entry point where Qunomon invoke this AIT from here                     |
-# | 11 | [License](##11-License)                            | 1     | Yes     | required           | generate license information                                               |
-# | 12 | [Deployment](##12-Deployment)                      | 1     | Yes     | uneditable         | convert this notebook to the python file for packaging purpose             |
-
+# 
+# |#|area name|cell num|description|edit or not|
+# |---|---|---|---|---|
+# | 1|flags set|1|setting of launch jupyter or ait flag.|no edit|
+# | 2|ait-sdk install|1|Use only jupyter launch.<br>find ait-sdk and install.|no edit|
+# | 3|create requirements and pip install|3|Use only jupyter launch.<br>create requirements.txt.<br>And install by requirements.txt.|should edit(second cell, you set use modules.)|
+# | 4|import|2|you should write use import modules.<br>but bottom lines do not edit.|should edit(first cell, you import your moduel.)|
+# | 5|create manifest|1|Use only jupyter launch.<br>create ait.manifest.json.|should edit|
+# | 6|create input|1|Use only jupyter launch.<br>create ait.input.json.|should edit|
+# | 7|initialize|1|this cell is initialize for ait progress.|no edit|
+# | 8|functions|N|you defined measures, resources, downloads in ait.manifesit.json. <br>Define any functions to add these.|should edit|
+# | 9|main|1|Read the data set or model and calls the function defined in `functions-area`.|should edit|
+# |10|entrypoint|1|Call the main function.|no edit|
+# |11|license attribute set|1|Use only notebook launch.<br>Setting attribute for license.|should edit|
+# |12|prepare deploy|1|Use only notebook launch.<br>Convert to python programs and create dag.py.|no edit|
+# 
 # ## notebook template revision history
-
-# 1.0.1 2020/10/21
+# 
+# ### 1.0.1 2020/10/21
 # 
 # * add revision history
 # * separate `create requirements and pip install` editable and noeditable
 # * separate `import` editable and noeditable
 # 
-# 1.0.0 2020/10/12
+# ### 1.0.0 2020/10/12
 # 
 # * new cerarion
 
-# ## body
+# In[ ]:
 
-# ### #1 Environment detection
 
-# [uneditable]
-
-# In[1]:
-
+#########################################
+# area:flags set
+# do not edit
+#########################################
 
 # Determine whether to start AIT or jupyter by startup argument
 import sys
 is_ait_launch = (len(sys.argv) == 2)
 
 
-# ### #2 Preparing AIT SDK
-
-# [uneditable]
-
 # In[2]:
 
 
+#########################################
+# area:ait-sdk install
+# do not edit
+#########################################
 if not is_ait_launch:
     # get ait-sdk file name
-    from pathlib import Path
     from glob import glob
-    import re
     import os
 
     current_dir = get_ipython().run_line_magic('pwd', '')
@@ -67,27 +65,29 @@ if not is_ait_launch:
     ait_sdk_name = os.path.basename(ait_sdk_list[-1])
 
     # install ait-sdk
-    get_ipython().system('pip install -q --upgrade pip')
+    get_ipython().system('pip install --upgrade pip')
     get_ipython().system('pip install -q --no-deps --force-reinstall ./$ait_sdk_name')
 
-
-# ### #3 Dependency Management
-
-# #### #3-1 [uneditable]
 
 # In[3]:
 
 
+#########################################
+# area:create requirements and pip install
+# do not edit
+#########################################
 if not is_ait_launch:
     from ait_sdk.common.files.ait_requirements_generator import AITRequirementsGenerator
     requirements_generator = AITRequirementsGenerator()
 
 
-# #### #3-2 [required]
-
 # In[4]:
 
 
+#########################################
+# area:create requirements and pip install
+# should edit
+#########################################
 if not is_ait_launch:
     requirements_generator.add_package('pandas','2.2.3')
     requirements_generator.add_package('numpy','2.0.2')
@@ -100,27 +100,30 @@ if not is_ait_launch:
     requirements_generator.add_package('pycocotools', '2.0.8')
 
 
-# #### #3-3 [uneditable]
-
 # In[5]:
 
 
+#########################################
+# area:create requirements and pip install
+# do not edit
+#########################################
 if not is_ait_launch:
     requirements_generator.add_package(f'./{ait_sdk_name}')
     requirements_path = requirements_generator.create_requirements(current_dir)
 
-    get_ipython().system('pip install -q -r $requirements_path ')
+    get_ipython().system('pip install -r $requirements_path ')
 
-
-# ### #4 Importing Libraries
-
-# #### #4-1 [required]
 
 # In[6]:
 
 
-# import if you need modules cell
+#########################################
+# area:import
+# should edit
+#########################################
 
+# import if you need modules cell
+from os import path
 from ultralytics import YOLO
 from torchmetrics.detection import MeanAveragePrecision
 from glob import glob
@@ -136,13 +139,15 @@ import numpy as np
 import cv2
 
 
-# #### #4-2 [uneditable]
-
 # In[7]:
 
 
+#########################################
+# area:import
+# do not edit
+#########################################
+
 # must use modules
-from os import path
 import shutil  # do not remove
 from ait_sdk.common.files.ait_input import AITInput  # do not remove
 from ait_sdk.common.files.ait_output import AITOutput  # do not remove
@@ -153,20 +158,21 @@ from ait_sdk.develop.annotation import measures, resources, downloads, ait_main 
 # must use modules
 
 
-# ### #5 Manifest Generation
-
-# [required]
-
 # In[8]:
 
 
+#########################################
+# area:create manifest
+# should edit
+#########################################
 if not is_ait_launch:
     from ait_sdk.common.files.ait_manifest_generator import AITManifestGenerator
+    
     manifest_genenerator = AITManifestGenerator(current_dir)
     manifest_genenerator.set_ait_name('eval_model_yolo_detect_robustness')
     manifest_genenerator.set_ait_description('YOLOの物体検出モデルに対しL∞/L2制約のもとで敵対的摂動を適用し、その影響を測定・評価する。摂動量ごとの敵対攻撃によってモデルの精度(mAP)の低下率と未検出(FNR)の増加率を算出し、推移を可視化することで攻撃に対するモデルの脆弱性を明らかにする。攻撃手法はDPatchを使用する。 \\n \\begin{math}mAP_{drop}=(1-\\frac{mAP_{adv}}{mAP_{org}})*100\\end{math} \\n \\begin{math}FNR_{increase}=( \\frac{FNR_{adv}}{FNR_{org}}-1)*100\\end{math}\\n※注意：処理対象の画像が200枚を超えると実行できない場合があります。\\n 実行環境（参考）\\n - ホストマシンの仕様：\\n     - プロセッサ：11th Gen Intel(R) Core(TM) i7-11800H @ 2.3GHz\\n     - 実装RAM：32.0GB(31.7 GB使用可能)\\n - Dockerの実行環境(docker stats 出力一部)：\\n     - メモリの使用量 ：13.08GiB / 15.62GiB\\n     - CPU 使用率：778.49%\\nこの環境では画像が200枚を超えると処理不可が大きくなり、メモリ不足またはCPU過負荷により実行できませんでした。処理枚数を減らすか、よりリソースの多い環境での実行を推奨します。')
     manifest_genenerator.set_ait_source_repository('https://github.com/aistairc/Qunomon_AIT_eval_model_yolo_detect_robustness')
-    manifest_genenerator.set_ait_version('1.0')
+    manifest_genenerator.set_ait_version('1.1')
     manifest_genenerator.add_ait_licenses('Apache License Version 2.0')
     manifest_genenerator.add_ait_keywords('yolo')
     manifest_genenerator.add_ait_keywords('object detect')
@@ -238,17 +244,17 @@ if not is_ait_launch:
                                           description='摂動量ごとのmAPの低下率とFNRの増加率をまとめた表')
     #### Downloads
     manifest_genenerator.add_ait_downloads(name='Log', 
-                                           description='AIT実行ログ')
+                                           description='AIT実行ログ')    
     manifest_path = manifest_genenerator.write()
 
-
-# ### #6 Prepare for the Input
-
-# [required]
 
 # In[9]:
 
 
+#########################################
+# area:create input
+# should edit
+#########################################
 if not is_ait_launch:
     from ait_sdk.common.files.ait_input_generator import AITInputGenerator
     input_generator = AITInputGenerator(manifest_path)
@@ -260,17 +266,17 @@ if not is_ait_launch:
     input_generator.set_ait_params("test_label_dataset_name", "yolo_labels")
     input_generator.set_ait_params("delta_upper", "10")
     input_generator.set_ait_params("delta_increment", "2")
-    #input_generator.set_ait_params("norm", "inf")
     
     input_generator.write()
 
 
-# ### #7 Initialization
-
-# [uneditable]
-
 # In[10]:
 
+
+#########################################
+# area:initialize
+# do not edit
+#########################################
 
 logger = get_logger()
 
@@ -295,13 +301,13 @@ ait_manifest.read_json(path_helper.get_manifest_file_path())
 ### do not edit cell
 
 
-# ### #8 Function definitions
-
-# [required]
-
 # In[11]:
 
 
+#########################################
+# area:functions
+# should edit
+#########################################
 class CustomDPatch:
     def __init__(self,model,patch_size,learning_rate=5,max_iter=100,norm_type="inf",epsilon=5):
         """
@@ -428,6 +434,7 @@ class CustomDPatch:
 # In[12]:
 
 
+# support function to do inference with given model and the dataloader.
 @log(logger)
 def compute_iou(boxA,boxB):
     """
@@ -443,6 +450,7 @@ def compute_iou(boxA,boxB):
     total_area=boxA_area+boxB_area-inter_area
     iou=inter_area/float(total_area+1e-6)
     return iou
+    return y_true, y_pred_score,y_pred_label
 
 
 # In[13]:
@@ -627,12 +635,13 @@ def move_log(file_path: str=None) -> str:
     shutil.move(get_log_path(), file_path)
 
 
-# ### #9 Main Algorithms
-
-# [required]
-
 # In[21]:
 
+
+#########################################
+# area:main
+# should edit
+#########################################
 
 @log(logger)
 @ait_main(ait_output, path_helper, is_ait_launch)
@@ -719,34 +728,35 @@ def main() -> None:
     move_log()     
 
 
-# ### #10 Entry point
-
-# [uneditable]
-
 # In[ ]:
 
 
+#########################################
+# area:entory point
+# do not edit
+#########################################
 if __name__ == '__main__':
     main()
 
 
-# ### #11 License
-
-# [required]
-
 # In[ ]:
 
 
+#########################################
+# area:license attribute set
+# should edit
+#########################################
 ait_owner='AIST'
 ait_creation_year='2025'
 
 
-# ### #12 Deployment
-
-# [uneditable] 
-
 # In[ ]:
 
+
+#########################################
+# area:prepare deproy
+# do not edit
+#########################################
 
 if not is_ait_launch:
     from ait_sdk.deploy import prepare_deploy

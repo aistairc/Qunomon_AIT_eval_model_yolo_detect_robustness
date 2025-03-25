@@ -8,7 +8,6 @@ services:
     user: root
     ports:
       - 9888:8888
-    shm_size: '8g'
     container_name: jupyter
     environment:
       TZ: Asia/Tokyo
